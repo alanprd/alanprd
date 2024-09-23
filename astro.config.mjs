@@ -16,6 +16,19 @@ import swup from "@swup/astro";
 
 import { remarkAddAnchor } from './src/plugins/remark-add-anchor.mjs';
 import { remarkReadingTime } from './src/plugins/remark-reading-time.mjs';
+import { ContentfulContentSource } from "@stackbit/cms-contentful";
+
+export default {
+  contentSources: [
+    new ContentfulContentSource({
+      spaceId: process.env.CONTENTFUL_SPACE_ID,
+      environment: process.env.CONTENTFUL_ENVIRONMENT,
+      previewToken: process.env.CONTENTFUL_PREVIEW_TOKEN,
+      accessToken: process.env.CONTENTFUL_MANAGEMENT_TOKEN
+    })
+  ]
+  // ...
+};
 
 const { USER_SITE } = await import('./src/consts.ts');
 
