@@ -13,7 +13,7 @@ export const USER_SITE = "https://prado-alan-netlify.app"
 export const USER_AVATAR = "/profile.webp";
 
 // Server and transition settings
-export const SERVER_URL = "https://demo.saroprock.com";
+export const SERVER_URL = "https://prado-alan-netlify.app";
 
 // Menu items for navigation
 export const menuItems = [
@@ -59,7 +59,7 @@ export const menuItems = [
   {
     id: "contact",
     text: "Contact",
-    href: "mailto:contact.evesunmaple@outlook.com", // Contact email
+    href: "pradoalan.pro@gmail.com", // Contact email
     target: "_blank", // Open in a new tab
     svg: "contact",
   },
