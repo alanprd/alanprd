@@ -13,7 +13,7 @@ export const USER_SITE = "https://prado-alan-netlify.app"
 export const USER_AVATAR = "/profile.webp";
 
 // Server and transition settings
-//export const SERVER_URL = "https://demo.saroprock.com";
+export const SERVER_URL = "https://demo.saroprock.com";
 
 // Menu items for navigation
 export const menuItems = [
