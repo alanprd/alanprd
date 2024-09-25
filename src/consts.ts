@@ -37,14 +37,14 @@ export const menuItems = [
         id: "Rootme",
         text: "Rootme",
         href: "/blog/categories/rootme",
-        svg: "cube",
+        svg: "heart",
         target: "_self",
       }, // rootme category
       {
         id: "HackTheBox",
         text: "HackThebox",
         href: "/blog/categories/hackthebox",
-        svg: "heart",
+        svg: "cube",
         target: "_self",
       }, // hactthebox category
     ],
