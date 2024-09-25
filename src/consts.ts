@@ -35,14 +35,14 @@ export const menuItems = [
       }, // All blog
       {
         id: "Rootme",
-        text: "Rootme WriteUp",
+        text: "Rootme",
         href: "/blog/categories/rootme",
         svg: "cube",
         target: "_self",
       }, // rootme category
       {
         id: "HackTheBox",
-        text: "HackThebox WriteUp",
+        text: "HackThebox",
         href: "/blog/categories/hackthebox",
         svg: "heart",
         target: "_self",
