@@ -13,43 +13,42 @@ badge: Pin
 
 Le but de ce challenge est que check soit égale à 0xbffffabc afin d'ouvrir un shell.
 
-'''c
+```c
 if(check == 0xbffffabc)
         shell();
-'''
+```
 
 Je ne risque pas de provoquer un débordement de buffer, car dès que count atteint 64, nous entrons dans une boucle infinie avec des messages "Oh no... Sorry !".
 Cependant, il est remarquable qu'il est possible de décrémenter count en fournissant au programme un octet 0x80.
 
-'''c
+```c
  case 0x08:
   count--;
   printf("\b");
   break;
-'''
+```
 
 De plus, dans le case default, la valeur de i est affectée à buffer[count]:
 
-'''c
+```c
  default:
   buffer[count] = i;
   count++;
   break;
-'''
+```
 
 Il est facile de voir la vulnérabilité : si nous parvenons à décrémenter count suffisamment pour que buffer[count] pointe sur check, nous pourrions écrire 0xbffffabc et ainsi prendre le contrôle du shell.
 Comme la variable check est juste en dessous de buffer, en ajoutant 4 fois 0x80 (4 fois car sizeof(int) = 4), nous pourrions pointer sur check.
 
-'''c
+```c
 char buffer[64];
   int check;
   int i = 0;
   int count = 0;
-'''
-
+```
 Je peux donc utiliser la commande ci-dessous pour décrémenter count 4 fois et écrire la séquence d'octets nécessaire pour passer la condition de check, en n'oubliant pas de terminer par ;cat pour maintenir le shell ouvert.
 
-'''python
+```python
   $ (python -c 'print"\x08"*4+"\xbc\xfa\xff\xbf"';cat)|./ch16
-'''
+```
 Ainsi, je peux afficher le contenu de .passwd et récupérer le flag.
