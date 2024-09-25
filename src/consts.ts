@@ -9,11 +9,11 @@ export const DATE_FORMAT = "ddd MMM DD YYYY";
 
 // User profile information
 export const USER_NAME = "iShayne";
-export const USER_SITE = "https://prado-alan-netlify.app"
+export const USER_SITE = "https://prado-alan.netlify.app"
 export const USER_AVATAR = "/profile.webp";
 
 // Server and transition settings
-export const SERVER_URL = "https://prado-alan-netlify.app";
+export const SERVER_URL = "https://prado-alan.netlify.app";
 
 // Menu items for navigation
 export const menuItems = [
@@ -34,19 +34,19 @@ export const menuItems = [
         target: "_self",
       }, // All blog
       {
-        id: "tech",
-        text: "Tech blogs",
-        href: "/blog/categories/tech",
+        id: "Rootme",
+        text: "Rootme WriteUp",
+        href: "/blog/categories/rootme",
         svg: "cube",
         target: "_self",
-      }, // Technology category
+      }, // rootme category
       {
-        id: "life",
-        text: "Life blogs",
-        href: "/blog/categories/life",
+        id: "HackTheBox",
+        text: "HackThebox WriteUp",
+        href: "/blog/categories/hackthebox",
         svg: "heart",
         target: "_self",
-      }, // Life category
+      }, // hactthebox category
     ],
   }, // Blog page with sub-items
   {
