@@ -79,4 +79,18 @@ export const socialIcons = [
     title: "Github",
     svg: "github",
   },
+  {
+    href: "https://www.root-me.org/Alanprd",
+    ariaLabel: "Rootme",
+    title: "Rootme",
+    svg: "rootme",
+  },
+   {
+    href: "https://app.hackthebox.com/profile/1821365",
+    ariaLabel: "HackTheBox",
+    title: "HackTheBox",
+    svg: "hackthebox",
+  },
+
+ 
 ];
